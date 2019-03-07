@@ -596,7 +596,7 @@ namespace Xamarin.Forms.DataGrid
 			foreach (var column in columns)
 			{
 				var newWidth = column.Title.Length != 0 ? column.Title.Length / (double) maxTitleLenght : 1;
-				column.Width = new GridLength(newWidth, GridUnitType.Star);
+				column.Width = new GridLength(newWidth + 0.5, GridUnitType.Star);
 			}
 
 		}
