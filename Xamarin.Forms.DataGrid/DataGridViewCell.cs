@@ -78,7 +78,7 @@
 						TextColor = _textColor,
 						HorizontalOptions = col.HorizontalContentAlignment,
 						VerticalOptions = col.VerticalContentAlignment,
-						LineBreakMode = LineBreakMode.WordWrap,
+						LineBreakMode = LineBreakMode.TailTruncation,
 					};
 					text.SetBinding(Label.TextProperty, new Binding(col.PropertyName, BindingMode.Default, stringFormat: col.StringFormat));
 					text.SetBinding(Label.FontSizeProperty, new Binding(DataGrid.FontSizeProperty.PropertyName, BindingMode.Default, source: DataGrid));

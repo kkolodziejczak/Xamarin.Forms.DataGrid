@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DataGridSample.Models;
 using Xamarin.Forms;
+using Xamarin.Forms.DataGrid;
 
 namespace DataGridSample.ViewModels
 {
@@ -17,6 +18,15 @@ namespace DataGridSample.ViewModels
 		#endregion
 
 		#region Properties
+
+		private ColumnCollection _columns;
+
+		public ColumnCollection Columns
+		{
+			get => _columns;
+			set { _columns = value; OnPropertyChanged(nameof(Columns)); }
+		}
+
 		public List<Team> Teams
 		{
 			get { return teams; }
@@ -46,6 +56,22 @@ namespace DataGridSample.ViewModels
 		{
 			Teams = Utils.DummyDataProvider.GetTeams();
 			RefreshCommand = new Command(CmdRefresh);
+			Columns = new ColumnCollection
+			{
+//				new DataGridColumn {Title = "Logo", PropertyName = "Logo"},
+				new DataGridColumn {Title = "Team", PropertyName = "Name"},
+				new DataGridColumn {Title = "Win", PropertyName = "Win"},
+				new DataGridColumn {Title = "Loose", PropertyName = "Loose"},
+				new DataGridColumn {Title = "Home", PropertyName = "Home"},
+				new DataGridColumn {Title = "Percentage", PropertyName = "Percentage"},
+				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
+			};
 		}
 
 		private async void CmdRefresh()

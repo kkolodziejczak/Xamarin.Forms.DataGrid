@@ -67,6 +67,11 @@ namespace Xamarin.Forms.DataGrid
 				defaultValueCreator: b => { return new ColumnCollection(); }
 			);
 
+		public static readonly BindableProperty ColumnsSourceProperty =
+			BindableProperty.Create(nameof(ColumnsSource), typeof(ColumnCollection), typeof(DataGrid),
+				propertyChanged: (b, o, n) => (b as DataGrid).InitHeaderView(),
+				defaultValueCreator: b => new ColumnCollection());
+
 		public static readonly BindableProperty ItemsSourceProperty =
 			BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(DataGrid), null,
 				propertyChanged: (b, o, n) => {
@@ -322,6 +327,12 @@ namespace Xamarin.Forms.DataGrid
 			set { SetValue(ColumnsProperty, value); }
 		}
 
+		public ColumnCollection ColumnsSource
+		{
+			get { return (ColumnCollection)GetValue(ColumnsSourceProperty); }
+			set { SetValue(ColumnsSourceProperty, value); }
+		}
+
 		public double FontSize
 		{
 			get { return (double)GetValue(FontSizeProperty); }
@@ -508,15 +519,12 @@ namespace Xamarin.Forms.DataGrid
 				ColumnSpacing = 0,
 			};
 
-			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
-
 			if (IsSortable)
 			{
 				column.SortingIcon.Style = (Style)_headerView.Resources["ImageStyleBase"];
+				column.SortingIcon.HorizontalOptions = LayoutOptions.End;
 
 				grid.Children.Add(column.SortingIcon);
-				Grid.SetColumn(column.SortingIcon, 1);
 
 				TapGestureRecognizer tgr = new TapGestureRecognizer();
 				tgr.Tapped += (s, e) => {
@@ -544,8 +552,20 @@ namespace Xamarin.Forms.DataGrid
 			_headerView.Padding = new Thickness(BorderThickness.Left, BorderThickness.Top, BorderThickness.Right, 0);
 			_headerView.ColumnSpacing = BorderThickness.HorizontalThickness / 2;
 
+			if (ColumnsSource != null)
+			{
+				if (Columns != null)
+				{
+					Columns.AddRange(ColumnsSource);
+				}
+				else
+				{
+					Columns = ColumnsSource;
+				}
+			}
 			if (Columns != null)
 			{
+				ModifyColumnCollectionToMakeColumnsAutomaticWidths(Columns);
 				foreach (var col in Columns)
 				{
 					_headerView.ColumnDefinitions.Add(new ColumnDefinition { Width = col.Width });
@@ -566,6 +586,37 @@ namespace Xamarin.Forms.DataGrid
 				foreach (var c in Columns)
 					c.BindingContext = BindingContext;
 		}
+
+		private void ModifyColumnCollectionToMakeColumnsAutomaticWidths(ColumnCollection columns)
+		{
+			if (!columns.Any())
+				return;
+
+			var maxTitleLenght = columns.Max(column =>
+			{
+//				return column.Title.Length == 0
+//					? column.FormattedTitle.ToString().Length
+//					: column.Title.Length;
+				return column.Title.Length;
+			});
+
+			foreach (var column in columns)
+			{
+//				if (column.FormattedTitle.Spans.Any())
+//				{
+					//TODO: [IDEA] add padding to the column header width
+					//TODO: some issue with invalid cast, possible issue that label is not created yet!
+//					newWidth = column.FormattedTitle.Spans.Sum(span => span.Text.Length);
+//				}
+//				else
+//				{
+				var newWidth = column.Title.Length != 0 ? column.Title.Length / (double) maxTitleLenght : 1;
+//				}
+				column.Width = new GridLength(newWidth, GridUnitType.Star);
+			}
+
+		}
+
 		#endregion
 
 		#region Sorting methods

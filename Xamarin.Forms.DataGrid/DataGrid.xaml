@@ -21,7 +21,7 @@
 					<Setter Property="HorizontalOptions" Value="Center"/>
 					<Setter Property="VerticalOptions" Value="Center"/>
 					<Setter Property="TextColor" Value="{Binding HeaderTextColor,Source={x:Reference self}}"/>
-					<Setter Property="LineBreakMode" Value="WordWrap"/>
+					<Setter Property="LineBreakMode" Value="NoWrap"/>
 				</Style>
 				<Style TargetType="Grid">
 					<Setter Property="BackgroundColor" Value="{Binding HeaderBackground,Source={x:Reference self}}"/>
