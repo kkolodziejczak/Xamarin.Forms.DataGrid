@@ -66,6 +66,7 @@
 					<dg:DataGrid.RowsBackgroundColorPalette>
 						<dg:PaletteCollection>
 							<Color>#F2F2F2</Color>
+							<Color>#F2F200</Color>
 							<Color>#FFFFFF</Color>
 						</dg:PaletteCollection>
 					</dg:DataGrid.RowsBackgroundColorPalette>
@@ -76,7 +77,7 @@
 					</dg:DataGrid.Resources>
 				</dg:DataGrid>
 			</StackLayout>
-		</ScrollView>
+			</ScrollView>
 	</ContentView>
 </ContentPage>
 

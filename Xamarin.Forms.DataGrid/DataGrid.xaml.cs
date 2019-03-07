@@ -17,7 +17,6 @@ namespace Xamarin.Forms.DataGrid
 		public event EventHandler Refreshing;
 		public event EventHandler<SelectedItemChangedEventArgs> ItemSelected;
 
-		#region Bindable properties
 		public static readonly BindableProperty ActiveRowColorProperty =
 			BindableProperty.Create(nameof(ActiveRowColor), typeof(Color), typeof(DataGrid), Color.FromRgb(128, 144, 160),
 				coerceValue: (b, v) => {
@@ -260,9 +259,7 @@ namespace Xamarin.Forms.DataGrid
 					if (o != n)
 						(b as DataGrid)._noDataView.Content = n as View;
 				});
-		#endregion
 
-		#region Properties
 		public Color ActiveRowColor
 		{
 			get { return (Color)GetValue(ActiveRowColorProperty); }
@@ -318,6 +315,8 @@ namespace Xamarin.Forms.DataGrid
 					SortItems(SortedColumnIndex);
 				else
 					_listView.ItemsSource = _internalItems;
+
+				_listView.HeightRequest = _listView.RowHeight * (_internalItems.Count);
 			}
 		}
 
@@ -446,14 +445,10 @@ namespace Xamarin.Forms.DataGrid
 			get { return (View)GetValue(NoDataViewProperty); }
 			set { SetValue(NoDataViewProperty, value); }
 		}
-		#endregion
 
-		#region Fields
 		Dictionary<int, SortingOrder> _sortingOrders;
 		ListView _listView;
-		#endregion
 
-		#region ctor
 
 		public DataGrid() : this(ListViewCachingStrategy.RecycleElement)
 		{
@@ -485,12 +480,15 @@ namespace Xamarin.Forms.DataGrid
 			};
 
 			_listView.SetBinding(ListView.RowHeightProperty, new Binding("RowHeight", source: this));
-			Grid.SetRow(_listView, 1);
-			Children.Add(_listView);
+			var scrollView = new ScrollView
+			{
+				Orientation = ScrollOrientation.Vertical,
+			};
+			scrollView.Content = _listView;
+			Grid.SetRow(scrollView, 1);
+			Children.Add(scrollView);
 		}
-		#endregion
 
-		#region UI Methods
 		protected override void OnParentSet()
 		{
 			base.OnParentSet();
@@ -507,9 +505,7 @@ namespace Xamarin.Forms.DataGrid
 		{
 			InternalItems = new List<object>(_internalItems);
 		}
-		#endregion
 
-		#region Header Creation Methods
 
 		private View GetHeaderViewForColumn(DataGridColumn column)
 		{
@@ -594,32 +590,18 @@ namespace Xamarin.Forms.DataGrid
 
 			var maxTitleLenght = columns.Max(column =>
 			{
-//				return column.Title.Length == 0
-//					? column.FormattedTitle.ToString().Length
-//					: column.Title.Length;
 				return column.Title.Length;
 			});
 
 			foreach (var column in columns)
 			{
-//				if (column.FormattedTitle.Spans.Any())
-//				{
-					//TODO: [IDEA] add padding to the column header width
-					//TODO: some issue with invalid cast, possible issue that label is not created yet!
-//					newWidth = column.FormattedTitle.Spans.Sum(span => span.Text.Length);
-//				}
-//				else
-//				{
 				var newWidth = column.Title.Length != 0 ? column.Title.Length / (double) maxTitleLenght : 1;
-//				}
 				column.Width = new GridLength(newWidth, GridUnitType.Star);
 			}
 
 		}
 
-		#endregion
 
-		#region Sorting methods
 		internal void SortItems(SortData sData)
 		{
 			if (InternalItems == null || sData.Index >= Columns.Count || !Columns[sData.Index].SortingEnabled)
@@ -672,6 +654,5 @@ namespace Xamarin.Forms.DataGrid
 
 			_listView.ItemsSource = _internalItems;
 		}
-		#endregion
 	}
 }
