@@ -8,20 +8,23 @@
 	<ContentView BackgroundColor="White">
 		<ScrollView Orientation="Horizontal">
 			<StackLayout>
-				<dg:DataGrid ColumnsSource="{Binding Columns}"
+				<dg:DataGrid HeaderCommand="{Binding ClickCommand}"
+							 CellCommand="{Binding ClickCellCommand}"
+				             ColumnsSource="{Binding Columns}"
 						     ItemsSource="{Binding Teams}"
 				             SelectionEnabled="False"
 							 RowHeight="70"
-				             HeaderHeight="50"
+							 FontSize="20"
 				             HeaderBackground="#FFFFFF"
 				             BorderColor="#FFFFFF"
 				             >
+				             <!-- HeaderHeight="50" -->
 							 <!-- PullToRefreshCommand="{Binding RefreshCommand}" -->
 				    <!--          IsRefreshing="{Binding IsRefreshing}" -->
 				             <!-- SelectedItem="{Binding SelectedTeam}" -->
 							 <!-- ActiveRowColor="#8899AA" -->
 					<x:Arguments>
-						<ListViewCachingStrategy>RecycleElementAndDataTemplate</ListViewCachingStrategy>
+						<ListViewCachingStrategy>RetainElement</ListViewCachingStrategy>
 					</x:Arguments>
 					<dg:DataGrid.HeaderLabelStyle>
 						<Style TargetType="Label">
@@ -30,17 +33,22 @@
 							<Setter Property="HorizontalOptions" Value="Center"/>
 							<Setter Property="VerticalOptions" Value="Center"/>
 							<Setter Property="VerticalTextAlignment" Value="Center"/>
-							<Setter Property="FontSize" Value="15"/>
+							<Setter Property="FontSize" Value="24"/>
+							<Setter Property="Margin" Value="40,20"/>
 						</Style>
 					</dg:DataGrid.HeaderLabelStyle>
-					<dg:DataGrid.HeaderFontSize>
-						<OnIdiom  x:TypeArguments="x:Double">
-							<OnIdiom.Tablet>18</OnIdiom.Tablet>
-							<OnIdiom.Phone>12</OnIdiom.Phone>
-						</OnIdiom>
-					</dg:DataGrid.HeaderFontSize>
 					<dg:DataGrid.Columns>
-						<dg:DataGridColumn Title="Logo" PropertyName="Logo" Width="100" SortingEnabled="False">
+						<dg:DataGridColumn Title=" "
+						                   PropertyName="Logo"
+						                   Width="100"
+						                   SortingEnabled="False">
+							<dg:DataGridColumn.HeaderTemplate>
+								<DataTemplate>
+									<Grid BackgroundColor="Blue">
+										<Label Text="{Binding}"/>
+									</Grid>
+								</DataTemplate>
+							</dg:DataGridColumn.HeaderTemplate>
 							<dg:DataGridColumn.CellTemplate>
 								<DataTemplate>
 									<Image Source="{Binding}" HorizontalOptions="Center" VerticalOptions="Center" Aspect="AspectFit" HeightRequest="60" />
@@ -70,8 +78,20 @@
 							<Color>#FFFFFF</Color>
 						</dg:PaletteCollection>
 					</dg:DataGrid.RowsBackgroundColorPalette>
+					<dg:DataGrid.RowsTextColorPalette>
+						<dg:PaletteCollection>
+							<Color></Color>
+						</dg:PaletteCollection>
+					</dg:DataGrid.RowsTextColorPalette>
 					<dg:DataGrid.Resources>
 						<ResourceDictionary>
+							<Color x:Key="Primary">
+								<x:Arguments>
+									<x:Double>0</x:Double>
+									<x:Double>1</x:Double>
+									<x:Double>1</x:Double>
+								</x:Arguments>
+							</Color>
 							<conv:StreakToColorConverter x:Key="StreakToColorConverter"/>
 						</ResourceDictionary>
 					</dg:DataGrid.Resources>

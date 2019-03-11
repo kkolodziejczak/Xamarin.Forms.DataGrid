@@ -91,11 +91,9 @@
 						Content = text,
 					};
 				}
-
 				_mainLayout.Children.Add(cell);
 				Grid.SetColumn(cell, DataGrid.Columns.IndexOf(col));
 			}
-
 			View = _mainLayout;
 		}
 
@@ -128,6 +126,15 @@
 		{
 			base.OnBindingContextChanged();
 			UpdateBackgroundColor();
+			if (DataGrid.CellCommand != null)
+			{
+				_mainLayout.GestureRecognizers.Clear();
+				_mainLayout.GestureRecognizers.Add(new TapGestureRecognizer
+				{
+					Command = DataGrid.CellCommand,
+					CommandParameter = BindingContext
+				});
+			}
 		}
 
 		protected override void OnParentSet()

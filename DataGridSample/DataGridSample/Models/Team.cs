@@ -1,4 +1,6 @@
-﻿namespace DataGridSample.Models
+﻿using System.Windows.Input;
+
+namespace DataGridSample.Models
 {
 	public class Team
 	{
@@ -13,5 +15,7 @@
 		public string Last10 { get; set; }
 		public string Streak { get; set; }
 		public string Logo { get; set; }
+
+		public ICommand ClickCommand { get; set; }
 	}
 }

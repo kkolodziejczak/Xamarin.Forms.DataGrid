@@ -33,7 +33,7 @@ namespace Xamarin.Forms.DataGrid
 			BindableProperty.Create(nameof(VerticalContentAlignment), typeof(LayoutOptions), typeof(DataGridColumn), LayoutOptions.Center);
 
 		public static readonly BindableProperty SortingEnabledProperty =
-			BindableProperty.Create(nameof(SortingEnabled), typeof(bool), typeof(DataGridColumn), true);
+			BindableProperty.Create(nameof(SortingEnabled), typeof(bool), typeof(DataGridColumn), false);
 
 		public static readonly BindableProperty HeaderLabelStyleProperty =
 			BindableProperty.Create(nameof(HeaderLabelStyle), typeof(Style), typeof(DataGridColumn),
@@ -41,6 +41,9 @@ namespace Xamarin.Forms.DataGrid
 					if ((b as DataGridColumn).HeaderLabel != null && (o != n))
 						(b as DataGridColumn).HeaderLabel.Style = n as Style;
 				});
+
+		public static readonly BindableProperty HeaderTemplateProperty =
+			BindableProperty.Create(nameof(HeaderTemplate), typeof(DataTemplate), typeof(DataGridColumn));
 
 		#endregion
 
@@ -80,6 +83,13 @@ namespace Xamarin.Forms.DataGrid
 			get { return (DataTemplate)GetValue(CellTemplateProperty); }
 			set { SetValue(CellTemplateProperty, value); }
 		}
+
+		public DataTemplate HeaderTemplate
+		{
+			get { return (DataTemplate)GetValue(HeaderTemplateProperty); }
+			set { SetValue(HeaderTemplateProperty, value); }
+		}
+
 
 		internal Image SortingIcon { get; set; }
 		internal Label HeaderLabel { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DataGridSample.Models;
@@ -18,6 +19,10 @@ namespace DataGridSample.ViewModels
 		#endregion
 
 		#region Properties
+
+
+		public ICommand ClickCommand { get; set; }
+		public ICommand ClickCellCommand { get; set; }
 
 		private ColumnCollection _columns;
 
@@ -54,23 +59,34 @@ namespace DataGridSample.ViewModels
 
 		public MainViewModel()
 		{
+			ClickCommand = new Command(s =>
+			{
+				Debug.WriteLine("Hello world!");
+			});
+
+			ClickCellCommand = new Command(s =>
+			{
+				Debug.WriteLine("Hello! " + s);
+			});
 			Teams = Utils.DummyDataProvider.GetTeams();
 			RefreshCommand = new Command(CmdRefresh);
 			Columns = new ColumnCollection
 			{
 //				new DataGridColumn {Title = "Logo", PropertyName = "Logo"},
-				new DataGridColumn {Title = "Team", PropertyName = "Name"},
-				new DataGridColumn {Title = "Win", PropertyName = "Win"},
-				new DataGridColumn {Title = "Loose", PropertyName = "Loose"},
-				new DataGridColumn {Title = "Home", PropertyName = "Home"},
-				new DataGridColumn {Title = "Percentage", PropertyName = "Percentage"},
-				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
-				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
-				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
-				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
-				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
-				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
-				new DataGridColumn {Title = "Streak", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Deadline", PropertyName = "Name"},
+				new DataGridColumn {Title = "Contractor", PropertyName = "Win"},
+				new DataGridColumn {Title = "Craft", PropertyName = "Loose"},
+				new DataGridColumn {Title = "Resp. person", PropertyName = "Home"},
+				new DataGridColumn {Title = "Field", PropertyName = "Percentage"},
+				new DataGridColumn {Title = "Building", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Level", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Room", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Axis/Position", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Type of defect", PropertyName = "Streak"},
+				new DataGridColumn {Title = "Priority", PropertyName = "Streak"},
+				new DataGridColumn {Title = "costs", PropertyName = "Streak"},
+				new DataGridColumn {Title = "imported on", PropertyName = "Streak"},
+				new DataGridColumn {Title = "imported at", PropertyName = "Streak"},
 			};
 		}
 

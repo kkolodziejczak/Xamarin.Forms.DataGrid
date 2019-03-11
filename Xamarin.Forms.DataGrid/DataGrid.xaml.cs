@@ -124,6 +124,12 @@ namespace Xamarin.Forms.DataGrid
 		public static readonly BindableProperty IsSortableProperty =
 			BindableProperty.Create(nameof(IsSortable), typeof(bool), typeof(DataGrid), true);
 
+		public static readonly BindableProperty HeaderCommandProperty =
+			BindableProperty.Create(nameof(HeaderCommand), typeof(ICommand), typeof(DataGrid), null);
+
+		public static readonly BindableProperty CellCommandProperty =
+			BindableProperty.Create(nameof(CellCommand), typeof(ICommand), typeof(DataGrid), null);
+		
 		public static readonly BindableProperty FontSizeProperty =
 			BindableProperty.Create(nameof(FontSize), typeof(double), typeof(DataGrid), 13.0);
 
@@ -270,6 +276,18 @@ namespace Xamarin.Forms.DataGrid
 		{
 			get { return (Color)GetValue(HeaderBackgroundProperty); }
 			set { SetValue(HeaderBackgroundProperty, value); }
+		}
+
+		public ICommand HeaderCommand
+		{
+			get { return (ICommand)GetValue(HeaderCommandProperty); }
+			set { SetValue(HeaderCommandProperty, value); }
+		}
+
+		public ICommand CellCommand
+		{
+			get { return (ICommand)GetValue(CellCommandProperty); }
+			set { SetValue(CellCommandProperty, value); }
 		}
 
 		[Obsolete("Please use HeaderLabelStyle", true)]
@@ -510,32 +528,54 @@ namespace Xamarin.Forms.DataGrid
 		private View GetHeaderViewForColumn(DataGridColumn column)
 		{
 			column.HeaderLabel.Style = column.HeaderLabelStyle ?? this.HeaderLabelStyle ?? (Style)_headerView.Resources["HeaderDefaultStyle"];
+			View cell;
 
-			Grid grid = new Grid {
-				ColumnSpacing = 0,
-			};
-
-			if (IsSortable)
+			if (column.HeaderTemplate != null)
 			{
-				column.SortingIcon.Style = (Style)_headerView.Resources["ImageStyleBase"];
-				column.SortingIcon.HorizontalOptions = LayoutOptions.End;
+				cell = new ContentView { Content = column.HeaderTemplate.CreateContent() as View };
 
-				grid.Children.Add(column.SortingIcon);
+				cell.SetBinding(BindingContextProperty,
+					new Binding(column.PropertyName, source: BindingContext));
 
-				TapGestureRecognizer tgr = new TapGestureRecognizer();
-				tgr.Tapped += (s, e) => {
-					int index = Columns.IndexOf(column);
-					SortingOrder order = _sortingOrders[index] == SortingOrder.Ascendant ? SortingOrder.Descendant : SortingOrder.Ascendant;
-
-					if (Columns.ElementAt(index).SortingEnabled)
-						SortedColumnIndex = new SortData(index, order);
-				};
-				grid.GestureRecognizers.Add(tgr);
+				if (HeaderCommand != null)
+				{
+					cell.GestureRecognizers.Add(new TapGestureRecognizer
+					{
+						Command = HeaderCommand,
+						CommandParameter = column
+					});
+				}
 			}
+			else
+			{
+				Grid grid = new Grid
+				{
+					ColumnSpacing = 0,
+				};
 
-			grid.Children.Add(column.HeaderLabel);
+				if (IsSortable)
+				{
+					column.SortingIcon.Style = (Style)_headerView.Resources["ImageStyleBase"];
+					column.SortingIcon.HorizontalOptions = LayoutOptions.End;
 
-			return grid;
+					grid.Children.Add(column.SortingIcon);
+
+					TapGestureRecognizer tgr = new TapGestureRecognizer();
+					tgr.Tapped += (s, e) => {
+						int index = Columns.IndexOf(column);
+						SortingOrder order = _sortingOrders[index] == SortingOrder.Ascendant ? SortingOrder.Descendant : SortingOrder.Ascendant;
+
+						if (Columns.ElementAt(index).SortingEnabled)
+							SortedColumnIndex = new SortData(index, order);
+					};
+					grid.GestureRecognizers.Add(tgr);
+				}
+
+				grid.Children.Add(column.HeaderLabel);
+
+				cell = grid;
+			}
+			return cell;
 		}
 
 		private void InitHeaderView()

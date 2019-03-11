@@ -6,9 +6,9 @@
 		<Authors>Ebubekir Akgul</Authors>
 		<Version>3.2.0</Version>
 		<Description>DataGrid component for Xamarin.Forms</Description>
-		<PackageLicenseUrl>https://raw.githubusercontent.com/akgulebubekir/Xamarin.Forms.DataGrid/master/LICENSE</PackageLicenseUrl>
-		<PackageProjectUrl>https://github.com/akgulebubekir/Xamarin.Forms.DataGrid</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/akgulebubekir/Xamarin.Forms.DataGrid</RepositoryUrl>
+		<PackageLicenseUrl>https://raw.githubusercontent.com/kkolodziejczak/Xamarin.Forms.DataGrid/master/LICENSE</PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/kkolodziejczak/Xamarin.Forms.DataGrid</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/kkolodziejczak/Xamarin.Forms.DataGrid</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>datagrid, xamarin.forms, xamarin Xamarin.Forms.Datagrid</PackageTags>
 		<NeutralLanguage>en-US</NeutralLanguage>
