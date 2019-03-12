@@ -20,6 +20,7 @@ namespace DataGridSample.ViewModels
 
 		#region Properties
 
+		public string Test { get; set; }
 
 		public ICommand ClickCommand { get; set; }
 		public ICommand ClickCellCommand { get; set; }
@@ -59,6 +60,7 @@ namespace DataGridSample.ViewModels
 
 		public MainViewModel()
 		{
+			Test = "123Testujemy!";
 			ClickCommand = new Command(s =>
 			{
 				Debug.WriteLine("Hello world!");

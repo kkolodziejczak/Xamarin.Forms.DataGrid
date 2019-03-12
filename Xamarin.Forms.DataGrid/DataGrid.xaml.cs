@@ -124,8 +124,6 @@ namespace Xamarin.Forms.DataGrid
 		public static readonly BindableProperty IsSortableProperty =
 			BindableProperty.Create(nameof(IsSortable), typeof(bool), typeof(DataGrid), true);
 
-		public static readonly BindableProperty HeaderCommandProperty =
-			BindableProperty.Create(nameof(HeaderCommand), typeof(ICommand), typeof(DataGrid), null);
 
 		public static readonly BindableProperty CellCommandProperty =
 			BindableProperty.Create(nameof(CellCommand), typeof(ICommand), typeof(DataGrid), null);
@@ -276,12 +274,6 @@ namespace Xamarin.Forms.DataGrid
 		{
 			get { return (Color)GetValue(HeaderBackgroundProperty); }
 			set { SetValue(HeaderBackgroundProperty, value); }
-		}
-
-		public ICommand HeaderCommand
-		{
-			get { return (ICommand)GetValue(HeaderCommandProperty); }
-			set { SetValue(HeaderCommandProperty, value); }
 		}
 
 		public ICommand CellCommand
@@ -533,18 +525,6 @@ namespace Xamarin.Forms.DataGrid
 			if (column.HeaderTemplate != null)
 			{
 				cell = new ContentView { Content = column.HeaderTemplate.CreateContent() as View };
-
-				cell.SetBinding(BindingContextProperty,
-					new Binding(column.PropertyName, source: BindingContext));
-
-				if (HeaderCommand != null)
-				{
-					cell.GestureRecognizers.Add(new TapGestureRecognizer
-					{
-						Command = HeaderCommand,
-						CommandParameter = column
-					});
-				}
 			}
 			else
 			{
@@ -619,8 +599,12 @@ namespace Xamarin.Forms.DataGrid
 		private void SetColumnsBindingContext()
 		{
 			if (Columns != null)
+			{
 				foreach (var c in Columns)
 					c.BindingContext = BindingContext;
+				foreach (var headerViewChild in _headerView.Children)
+					headerViewChild.BindingContext = BindingContext;
+			}
 		}
 
 		private void ModifyColumnCollectionToMakeColumnsAutomaticWidths(ColumnCollection columns)

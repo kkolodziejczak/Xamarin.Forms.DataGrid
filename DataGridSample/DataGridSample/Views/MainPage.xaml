@@ -8,8 +8,7 @@
 	<ContentView BackgroundColor="White">
 		<ScrollView Orientation="Horizontal">
 			<StackLayout>
-				<dg:DataGrid HeaderCommand="{Binding ClickCommand}"
-							 CellCommand="{Binding ClickCellCommand}"
+				<dg:DataGrid CellCommand="{Binding ClickCellCommand}"
 				             ColumnsSource="{Binding Columns}"
 						     ItemsSource="{Binding Teams}"
 				             SelectionEnabled="False"
@@ -45,7 +44,10 @@
 							<dg:DataGridColumn.HeaderTemplate>
 								<DataTemplate>
 									<Grid BackgroundColor="Blue">
-										<Label Text="{Binding}"/>
+										<Label Text="{Binding Test}"/>
+										<Grid.GestureRecognizers>
+											<TapGestureRecognizer Command="{Binding ClickCommand}" CommandParameter="{Binding}"/>
+										</Grid.GestureRecognizers>
 									</Grid>
 								</DataTemplate>
 							</dg:DataGridColumn.HeaderTemplate>
