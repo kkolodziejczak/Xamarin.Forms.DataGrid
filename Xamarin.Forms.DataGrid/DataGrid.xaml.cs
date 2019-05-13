@@ -62,7 +62,10 @@ namespace Xamarin.Forms.DataGrid
 
 		public static readonly BindableProperty ColumnsProperty =
 			BindableProperty.Create(nameof(Columns), typeof(ColumnCollection), typeof(DataGrid),
-				propertyChanged: (b, o, n) => (b as DataGrid).InitHeaderView(),
+				propertyChanged: (b, o, n) =>
+				{
+					(b as DataGrid).InitHeaderView();
+				},
 				defaultValueCreator: b => { return new ColumnCollection(); }
 			);
 
@@ -329,11 +332,13 @@ namespace Xamarin.Forms.DataGrid
 				_listView.HeightRequest = _listView.RowHeight * (_internalItems.Count);
 			}
 		}
-
 		public ColumnCollection Columns
 		{
 			get { return (ColumnCollection)GetValue(ColumnsProperty); }
-			set { SetValue(ColumnsProperty, value); }
+			set
+			{
+				SetValue(ColumnsProperty, value);
+			}
 		}
 
 		public ColumnCollection ColumnsSource
@@ -513,7 +518,10 @@ namespace Xamarin.Forms.DataGrid
 
 		private void Reload()
 		{
-			InternalItems = new List<object>(_internalItems);
+			if (_internalItems != null)
+			{
+				InternalItems = new List<object>(_internalItems);
+			}
 		}
 
 
@@ -564,7 +572,6 @@ namespace Xamarin.Forms.DataGrid
 			_headerView.Children.Clear();
 			_headerView.ColumnDefinitions.Clear();
 			_sortingOrders.Clear();
-
 			_headerView.Padding = new Thickness(BorderThickness.Left, BorderThickness.Top, BorderThickness.Right, 0);
 			_headerView.ColumnSpacing = BorderThickness.HorizontalThickness / 2;
 
@@ -572,7 +579,17 @@ namespace Xamarin.Forms.DataGrid
 			{
 				if (Columns != null)
 				{
+					if (Columns != null && Columns2 == null)
+					{
+						Columns2 = new ColumnCollection(Columns);
+					}
+					Columns.Clear();
+					foreach (var col in Columns2)
+					{
+						Columns.Add(col);
+					}
 					Columns.AddRange(ColumnsSource);
+					Reload();
 				}
 				else
 				{
@@ -595,6 +612,8 @@ namespace Xamarin.Forms.DataGrid
 				}
 			}
 		}
+
+		public ColumnCollection Columns2 { get; set; }
 
 		private void SetColumnsBindingContext()
 		{
