@@ -579,7 +579,6 @@ namespace Xamarin.Forms.DataGrid
 			{
 				if (Columns != null)
 				{
-					//Columns.RemoveRange(1,Columns.Count -1);
 					if (Columns != null && Columns2 == null)
 					{
 						Columns2 = new ColumnCollection(Columns);
